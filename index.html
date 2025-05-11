@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Anbu Market - Top Up Game</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #007BFF;
+      color: white;
+      padding: 1.5rem;
+      text-align: center;
+    }
+    .container {
+      padding: 2rem;
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    label, select, input {
+      display: block;
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+    button {
+      background: #25D366;
+      color: white;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 5px;
+      width: 100%;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .payment-methods img {
+      max-height: 50px;
+      margin: 0.5rem;
+    }
+    footer {
+      background: #202124;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+    }
+    .section-title {
+      margin-top: 2rem;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Anbu Market</h1>
+    <p>Top Up Game Otomatis & Aman</p>
+  </header>
+
+  <div class="container">
+    <!-- FORM TOP UP -->
+    <h2 class="section-title">Form Top Up</h2>
+    <form id="topupForm">
+      <label for="game">Pilih Game:</label>
+      <select id="game" name="game" required>
+        <option value="Free Fire">Free Fire</option>
+        <option value="Mobile Legends">Mobile Legends</option>
+        <option value="PUBG Mobile">PUBG Mobile</option>
+        <option value="Genshin Impact">Genshin Impact</option>
+        <option value="Valorant">Valorant</option>
+      </select>
+
+      <label for="userid">User ID Game:</label>
+      <input type="text" id="userid" name="userid" placeholder="Masukkan User ID" required />
+
+      <label for="jumlah" id="jumlahLabel">Jumlah Top Up:</label>
+      <select id="jumlah" name="jumlah" required></select>
+
+      <button type="submit">Order via WhatsApp</button>
+    </form>
+
+    <!-- FORM CEK STATUS -->
+    <h2 class="section-title">Cek Status Order</h2>
+    <form id="cekStatusForm">
+      <label for="orderId">Masukkan ID Pesanan:</label>
+      <input type="text" id="orderId" name="orderId" placeholder="Contoh: INV123456" required />
+      <button type="submit" style="background:#007BFF;">Cek Status</button>
+    </form>
+
+    <!-- Metode Pembayaran -->
+    <div class="payment-methods" style="text-align:center; margin-top: 2rem;">
+      <h3>Metode Pembayaran</h3>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Logo_dana_blue.svg/512px-Logo_dana_blue.svg.png" alt="DANA" />
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/QRIS_logo.svg/512px-QRIS_logo.svg.png" alt="QRIS" />
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 Anbu Shop Game | Powered by Anbu Market<br/>
+    WhatsApp: 085189885426 | Instagram: @lanceonly6
+  </footer>
+
+  <script>
+    const paketTopUp = {
+      "Free Fire": [
+        "5 Diamond - Rp1.000",
+        "12 Diamond - Rp2.500",
+        "50 Diamond - Rp9.000",
+        "70 Diamond - Rp11.000",
+        "140 Diamond - Rp21.000",
+        "210 Diamond - Rp31.000",
+        "355 Diamond - Rp52.000",
+        "720 Diamond - Rp99.000",
+        "1450 Diamond - Rp189.000"
+      ],
+      "Mobile Legends": [
+        "5 Diamond - Rp1.200",
+        "12 Diamond - Rp2.800",
+        "50 Diamond - Rp9.500",
+        "86 Diamond - Rp14.000",
+        "172 Diamond - Rp28.000",
+        "257 Diamond - Rp42.000",
+        "706 Diamond - Rp99.000"
+      ],
+      "PUBG Mobile": [
+        "60 UC - Rp12.000",
+        "180 UC - Rp36.000",
+        "325 UC - Rp60.000",
+        "660 UC - Rp110.000"
+      ],
+      "Genshin Impact": [
+        "60 Genesis Crystals - Rp15.000",
+        "300+30 Genesis Crystals - Rp75.000",
+        "980+110 Genesis Crystals - Rp230.000"
+      ],
+      "Valorant": [
+        "125 VP - Rp12.000",
+        "420 VP - Rp35.000",
+        "700 VP - Rp60.000",
+        "1375 VP - Rp110.000"
+      ]
+    };
+
+    function updateJumlahOptions() {
+      const game = document.getElementById("game").value;
+      const jumlahSelect = document.getElementById("jumlah");
+      jumlahSelect.innerHTML = "";
+
+      paketTopUp[game].forEach(paket => {
+        const option = document.createElement("option");
+        option.value = paket;
+        option.textContent = paket;
+        jumlahSelect.appendChild(option);
+      });
+
+      document.getElementById("jumlahLabel").textContent = 
+        game.includes("Valorant") || game.includes("PUBG") ? "Jumlah Top Up VP/UC:" :
+        game.includes("Genshin") ? "Jumlah Top Up Crystals:" :
+        "Jumlah Top Up Diamond:";
+    }
+
+    document.getElementById("game").addEventListener("change", updateJumlahOptions);
+    updateJumlahOptions();
+
+    document.getElementById("topupForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const game = document.getElementById("game").value;
+      const userid = document.getElementById("userid").value;
+      const jumlah = document.getElementById("jumlah").value;
+
+      const pesan = `Halo Admin, saya ingin top up:\nGame: ${game}\nUser ID: ${userid}\nPaket: ${jumlah}`;
+      const nomorWhatsApp = "6285189885426";
+      const url = `https://wa.me/${nomorWhatsApp}?text=${encodeURIComponent(pesan)}`;
+      window.open(url, "_blank");
+    });
+
+    document.getElementById("cekStatusForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const orderId = document.getElementById("orderId").value;
+      const pesan = `Halo Admin, saya ingin cek status pesanan saya dengan ID: ${orderId}`;
+      const nomorWhatsApp = "6285189885426";
+      const url = `https://wa.me/${nomorWhatsApp}?text=${encodeURIComponent(pesan)}`;
+      window.open(url, "_blank");
+    });
+  </script>
+</body>
+</html>
